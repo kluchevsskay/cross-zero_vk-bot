@@ -114,3 +114,9 @@ def getComputerMove(board, computer_letter):
     return random_step(board, [2, 4, 6, 8])
 
 
+def is_board_full(board):
+    """проверка на заполнение поля"""
+    for i in range(1, 10):
+        if player_can_make_this_step(board, i):
+            return False
+        return True
