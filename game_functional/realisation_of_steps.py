@@ -84,3 +84,19 @@ def random_step(board, steps_list):
         return random.choice(possible_steps)
     else:
         return None
+
+
+def getComputerMove(board, computer_letter):
+    """копиz содержимого доски и хода компа. Исходя из этого определяет куда двигаться и возвращает ход """
+    if computer_letter == 'x':
+        player_letter = 'o'
+    else:
+        player_letter = 'x'
+
+    # проверка на возможный выигрыш игрока
+    for i in range(1, 10):
+        copy = board_copy(board)
+        if player_can_make_this_step(copy, i):
+            make_step(copy, player_letter, i)
+            if player_won(copy, player_letter):
+                return i
