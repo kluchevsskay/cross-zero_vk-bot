@@ -87,7 +87,7 @@ def random_step(board, steps_list):
 
 
 def getComputerMove(board, computer_letter):
-    """копиz содержимого доски и хода компа. Исходя из этого определяет куда двигаться и возвращает ход """
+    """копия содержимого доски и хода компа. Исходя из этого определяет куда двигаться и возвращает ход """
     if computer_letter == 'x':
         player_letter = 'o'
     else:
@@ -100,3 +100,17 @@ def getComputerMove(board, computer_letter):
             make_step(copy, player_letter, i)
             if player_won(copy, player_letter):
                 return i
+
+    # комп старается занять один из свободных углов
+    step = random_step(board, [2, 4, 6, 8])
+    if step is not None:
+        return step
+
+    # старается занять центр, если он свободен, конечно же
+    if player_can_make_this_step(board, 5):
+        return 5
+
+    # одну из боковых клеток
+    return random_step(board, [2, 4, 6, 8])
+
+
