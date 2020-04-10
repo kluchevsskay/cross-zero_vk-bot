@@ -86,8 +86,9 @@ def random_step(board, steps_list):
         return None
 
 
-def getComputerMove(board, computer_letter):
+def get_comp_move(board, computer_letter):
     """копия содержимого доски и хода компа. Исходя из этого определяет куда двигаться и возвращает ход """
+
     if computer_letter == 'x':
         player_letter = 'o'
     else:
@@ -116,7 +117,59 @@ def getComputerMove(board, computer_letter):
 
 def is_board_full(board):
     """проверка на заполнение поля"""
+
     for i in range(1, 10):
         if player_can_make_this_step(board, i):
             return False
         return True
+
+
+def draw_board(board):
+    """ рисование игровой доски в символьной графике"""
+    print(' | |')
+    print(' ' + board[7] + ' | ' + board[8] + ' | ' + board[9])
+    print(' | |')
+    print('---+---+---')
+    print(' | |')
+    print(' ' + board[4] + ' | ' + board[5] + ' | ' + board[6])
+    print(' | |')
+    print('---+---+---')
+    print(' | |')
+    print(' ' + board[1] + ' | ' + board[2] + ' | ' + board[3])
+    print(' | |')
+
+
+while True:
+    the_board = [' '] * 10
+    player_letter, computer_letter = players_letter()
+    turn = first_step()
+    game_is_playing = True
+
+    while game_is_playing:
+        if turn == 'игрок':
+            # ход игрока
+            move = get_player_step(the_board)
+            make_step(the_board, player_letter, move)
+
+            if player_won(the_board, player_letter):
+                game_is_playing = False
+
+            else:
+                if is_board_full(the_board):
+                    break
+                else:
+                    turn = 'комп'
+
+        else:
+            # ход игрока
+            move = get_comp_move(the_board, computer_letter)
+            make_step(the_board, computer_letter, move)
+            if player_won(the_board, computer_letter):
+                game_is_playing = False
+            else:
+                if is_board_full(the_board):
+                    break
+                else:
+                    turn = 'игрок'
+    if not play_again():
+        break
