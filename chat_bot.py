@@ -91,4 +91,4 @@ while True:
                 last_sms_of_bot = 'опечатка'
 
     except Exception as E:
-        time.sleep(1)
+        time.sleep(0.5)
