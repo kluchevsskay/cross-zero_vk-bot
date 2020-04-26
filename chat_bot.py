@@ -4,6 +4,8 @@ import random
 import time
 
 # API-ключ
+from game_functional import realisation_of_steps
+
 TOKEN = "114c7052434868862e6a2a38c9b643781bc1aa968fab18720423548aa9968993d6dd72d28e6ede0d64c8e"
 
 vk = vk_api.VkApi(
@@ -56,9 +58,31 @@ while True:
                 last_sms_of_bot = 'старт'
 
             elif body.lower() in yes_list and last_sms_of_bot != 'опечатка':
-                vk.method("messages.send", {"peer_id": id, "message": "что ж, сам напросился",
-                                            "random_id": random.randint(1, 2147483647)})
+                vk.method("messages.send",
+                          {"peer_id": id, "message": "что ж, сам напросился. За кого будешь играть? Отправь Х или 0",
+                           "random_id": random.randint(1, 2147483647)})
                 last_sms_of_bot = 'старт'
+
+            # начало игры
+            elif body.lower() == 'x':
+                vk.method("messages.send",
+                          {"peer_id": id,
+                           "message": "окей, ты крестик, а я нолик. Начинаем! Сейчас генератор определит, "
+                                      "кто ходит первым",
+                           "random_id": random.randint(1, 2147483647)})
+                realisation_of_steps.players_letter('x')
+                if realisation_of_steps.first_step() == 'комп':
+                    vk.method("messages.send",
+                              {"peer_id": id,
+                               "message": "к счастью, я хожу первым",
+                               "random_id": random.randint(1, 2147483647)})
+                else:
+                    vk.method("messages.send",
+                              {"peer_id": id,
+                               "message": "к сожалению, ты ходишь первым",
+                               "random_id": random.randint(1, 2147483647)})
+
+
 
             elif body.lower() in special_list:
                 vk.method("messages.send", {"peer_id": id,
