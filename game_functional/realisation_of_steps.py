@@ -20,10 +20,10 @@ def first_step():
         return 'игрок'
 
 
-def play_again():
+def play_again(answer):
     """сыграть ещё раз"""
-    # попробовать сделать взаимодействие с кнопками всплывающей клавы todo
-    return True
+
+    return answer.lower().startswith('д')
 
 
 def make_step(board, letter, step):
@@ -148,14 +148,18 @@ while True:
     while game_is_playing:
         if turn == 'игрок':
             # ход игрока
+
+            draw_board(the_board)
             move = get_player_step(the_board)
             make_step(the_board, player_letter, move)
 
             if player_won(the_board, player_letter):
+                draw_board(the_board)
                 game_is_playing = False
 
             else:
                 if is_board_full(the_board):
+                    draw_board(the_board)
                     break
                 else:
                     turn = 'комп'
@@ -165,9 +169,11 @@ while True:
             move = get_comp_move(the_board, computer_letter)
             make_step(the_board, computer_letter, move)
             if player_won(the_board, computer_letter):
+                draw_board(the_board)
                 game_is_playing = False
             else:
                 if is_board_full(the_board):
+                    draw_board(the_board)
                     break
                 else:
                     turn = 'игрок'
