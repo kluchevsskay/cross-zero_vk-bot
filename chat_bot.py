@@ -22,24 +22,73 @@ while True:
             # определение текста последнего сообщения
             body = messages["items"][0]["last_message"]["text"]
 
+            # определение последнего сообщения от бота для некоторых ситуаций
+            last_sms_of_bot = ''
+
+            # списки различных вариаций ответа юзера
+            yes_list = ['да', 'ага', 'хочу', 'желаю', 'безусловно', 'конечно', '+', 'йес', 'уес', 'yes', 'допустим',
+                        'oui', 'уи', 'так точно', 'ок', 'окей', 'ok']
+            no_list = ['не', 'нет', 'не хочу', 'не желаю', '-', 'no', 'ноу']
+            hello_list = ['хай', 'привет', 'салам', 'здравствуй', 'здравия желаю', 'добрый день', 'бонжур', 'bounjour']
+            bye_list = ['пока', 'до свидания', 'прощай', 'bye', 'бай', 'оревуар']
+            special_list = ['jjba', 'jojo', 'джоджо', 'джёджё', 'жожо', 'жожа']
+
             # структура различных ответов на почти всевозможные сообщения от юзера
-            if body.lower() == "привет":
+            if body.lower() in hello_list and last_sms_of_bot != 'пока':
                 vk.method("messages.send",
                           {"peer_id": id, "message": "салам-пополам! Желаешь сыграть в кретики-нолики?",
                            "random_id": random.randint(1, 2147483647)})
+                last_sms_of_bot = 'привет'
 
-            elif body.lower() == "да":
+            if body.lower() in hello_list and last_sms_of_bot == 'пока':
+                vk.method("messages.send",
+                          {"peer_id": id,
+                           "message": "и вновь салам-пополам! Тебе снова захотелось провести своё время"
+                                      " за игрой в кретики-нолики против меня?",
+                           "random_id": random.randint(1, 2147483647)})
+                last_sms_of_bot = 'привет'
+
+            elif body.lower() in yes_list and last_sms_of_bot == 'опечатка':
+                vk.method("messages.send", {"peer_id": id,
+                                            "message": "тогда я закрою глаза на это сообщение и жду"
+                                                       " от тебя более внятного ответа :)",
+                                            "random_id": random.randint(1, 2147483647)})
+                last_sms_of_bot = 'старт'
+
+            elif body.lower() in yes_list and last_sms_of_bot != 'опечатка':
                 vk.method("messages.send", {"peer_id": id, "message": "что ж, сам напросился",
                                             "random_id": random.randint(1, 2147483647)})
+                last_sms_of_bot = 'старт'
 
-            elif body.lower() == "нет":
+            elif body.lower() in special_list:
+                vk.method("messages.send", {"peer_id": id,
+                                            "message": "ゴゴゴゴ Яре-Яре, мой друг."
+                                                       " ORA-ORская отсылка засчитана! ",
+                                            "random_id": random.randint(1, 2147483647)})
+                last_sms_of_bot = 'жожа'
+
+            elif body.lower() in bye_list:
+                vk.method("messages.send", {"peer_id": id, "message": "au revoir, mon ami! :)",
+                                            "random_id": random.randint(1, 2147483647)})
+                last_sms_of_bot = 'пока'
+
+            elif body.lower() in no_list and last_sms_of_bot != 'опечатка':
                 vk.method("messages.send", {"peer_id": id, "message": "тогда прощай, Путник",
                                             "random_id": random.randint(1, 2147483647)})
+                last_sms_of_bot = 'пока'
+
+            elif body.lower() in no_list and last_sms_of_bot == 'опечатка':
+                vk.method("messages.send",
+                          {"peer_id": id, "message": "охх, мне с каждым разом всё сложнее тебя понимать, Приятель",
+                           "random_id": random.randint(1, 2147483647)})
+                last_sms_of_bot = 'непонимание'
 
             # условие получение не предусмотренного мною ответа
             else:
                 vk.method("messages.send",
-                          {"peer_id": id, "message": "Ты опе4атался или же ты именно это имел в виду?",
+                          {"peer_id": id, "message": "ты опе4атался или же ты именно это имел в виду?",
                            "random_id": random.randint(1, 2147483647)})
+                last_sms_of_bot = 'опечатка'
+
     except Exception as E:
         time.sleep(1)
